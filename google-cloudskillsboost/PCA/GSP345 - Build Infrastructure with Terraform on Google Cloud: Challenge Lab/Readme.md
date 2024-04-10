@@ -1,6 +1,15 @@
 ## Automating Infrastructure on Google Cloud with Terraform: Challenge Lab (GSP345) ##
 
-My details:
+***Topics tested***:
+Import existing infrastructure into your Terraform configuration.
+Build and reference your own Terraform modules.
+Add a remote backend to your configuration.
+Use and implement a module from the Terraform Registry.
+Re-provision, destroy, and update infrastructure.
+Test connectivity between the resources you've created.
+
+
+***My details:***
 
 Project ID: qwiklabs-gcp-03-9e7a9808ef9a
 Bucket Name: tf-bucket-606613
