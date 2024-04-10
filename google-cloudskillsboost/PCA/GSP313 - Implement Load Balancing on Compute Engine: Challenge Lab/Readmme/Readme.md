@@ -1,7 +1,7 @@
-Lab Name: Create and Manage Cloud Resources: Challenge Lab (GSP313)
+## Lab Name: Create and Manage Cloud Resources: Challenge Lab (GSP313)
 
 
-Task 1: Create a project jumphost instance
+## Task 1: Create a project jumphost instance
 Run command:
 
 ```
@@ -15,7 +15,7 @@ gcloud compute instances create nucleus-jumphost-941 \
           --no-address
 
 ```       
-Task 2: Create a Kubernetes service cluster
+## Task 2: Create a Kubernetes service cluster
 Run command:
 
 ```
@@ -40,7 +40,7 @@ kubectl expose deployment hello-server \
           --port 8080
 ```
 
-Task 3: Set up an HTTP load balancer
+## Task 3: Set up an HTTP load balancer
 Run command:
 
 ```
