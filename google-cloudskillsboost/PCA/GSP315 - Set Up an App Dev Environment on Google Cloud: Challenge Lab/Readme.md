@@ -1,4 +1,4 @@
-# Challenge Scenario
+## GSP315 - Set Up an App Dev Environment on Google Cloud: Challenge Lab
 
 You are just starting your junior cloud engineer role with Jooli Inc. So far, you have been helping teams create and manage Google Cloud resources. You are expected to have the skills and knowledge for these tasks, so don’t expect step-by-step guides.
 
@@ -20,7 +20,25 @@ Some Jooli Inc. standards you should follow:
 - Naming is normally team-resource, e.g., an instance could be named kraken-webserver1.
 - Allocate cost-effective resource sizes. Projects are monitored and excessive resource use will result in the containing project's termination (and possibly yours), so beware.
 
-Each task is described in detail below, good luck!
+These are my lab details, however, you will have your own unique ones that you can replace with.
+
+### General Info
+- **Project ID**: `qwiklabs-gcp-01-a8ef95d831ed`
+- **Region**: `us-west1`
+- **Zone**: `us-west1-b`
+
+### Users
+- **Username 1**: `student-04-bcf3cb8c5d80@qwiklabs.net`
+- **Username 2**: `student-04-ed532d8d593e@qwiklabs.net`
+
+### Resources
+- **Bucket Name**: `qwiklabs-gcp-01-a8ef95d831ed-bucket`
+- **Pub/Sub Topic**: `topic-memories-312`
+
+### Cloud Function
+- **Name**: `memories-thumbnail-creator`
+- **Entry Point**: `memories-thumbnail-creator`
+
 
 ### Task 1: Create a Bucket
 
@@ -54,11 +72,14 @@ Create a Cloud Function named `memories-thumbnail-creator` to generate thumbnail
 1. **Navigate to Cloud Functions:** Open the Cloud Console and use the Navigation menu to locate and select Cloud Functions.
 2. **Create Function:** Click the "Create function" button.
 3. **Configure Function:**
+   - **Enviroment:** 2nd gen
    - **Function Name:** Enter `memories-thumbnail-creator`.
+   - **Region:** us-west1 region
    - **Trigger:** Select Cloud Storage from the dropdown.
    - **Event Type:** Choose Finalizing/Creating.
    - **Bucket:** Specify `qwiklabs-gcp-01-a8ef95d831ed-bucket`.
-4. Click "Save", then "Next".
+   - **Maximum numbers of instances:** Type 5
+4. Click "Next", then "Enable".
 5. **Runtime Settings:** Choose Node.js 14 as the Runtime.
 6. **Function Details:**
    - **Entry Point (Function to execute):** Type in `thumbnail`.
@@ -67,11 +88,100 @@ Create a Cloud Function named `memories-thumbnail-creator` to generate thumbnail
 
 #### Add the following code to `index.js`:
 
-```javascript
+```
 const functions = require('@google-cloud/functions-framework');
-// Additional required modules and function code...
+const crc32 = require("fast-crc32c");
+const { Storage } = require('@google-cloud/storage');
+const gcs = new Storage();
+const { PubSub } = require('@google-cloud/pubsub');
+const imagemagick = require("imagemagick-stream");
 
+functions.cloudEvent('memories-thumbnail-creator', cloudEvent => {
+  const event = cloudEvent.data;
 
+  console.log(`Event: ${event}`);
+  console.log(`Hello ${event.bucket}`);
+
+  const fileName = event.name;
+  const bucketName = event.bucket;
+  const size = "64x64"
+  const bucket = gcs.bucket(bucketName);
+  const topicName = "topic-memories-312";
+  const pubsub = new PubSub();
+  if ( fileName.search("64x64_thumbnail") == -1 ){
+    // doesn't have a thumbnail, get the filename extension
+    var filename_split = fileName.split('.');
+    var filename_ext = filename_split[filename_split.length - 1];
+    var filename_without_ext = fileName.substring(0, fileName.length - filename_ext.length );
+    if (filename_ext.toLowerCase() == 'png' || filename_ext.toLowerCase() == 'jpg'){
+      // only support png and jpg at this point
+      console.log(`Processing Original: gs://${bucketName}/${fileName}`);
+      const gcsObject = bucket.file(fileName);
+      let newFilename = filename_without_ext + size + '_thumbnail.' + filename_ext;
+      let gcsNewObject = bucket.file(newFilename);
+      let srcStream = gcsObject.createReadStream();
+      let dstStream = gcsNewObject.createWriteStream();
+      let resize = imagemagick().resize(size).quality(90);
+      srcStream.pipe(resize).pipe(dstStream);
+      return new Promise((resolve, reject) => {
+        dstStream
+          .on("error", (err) => {
+            console.log(`Error: ${err}`);
+            reject(err);
+          })
+          .on("finish", () => {
+            console.log(`Success: ${fileName} → ${newFilename}`);
+              // set the content-type
+              gcsNewObject.setMetadata(
+              {
+                contentType: 'image/'+ filename_ext.toLowerCase()
+              }, function(err, apiResponse) {});
+              pubsub
+                .topic(topicName)
+                .publisher()
+                .publish(Buffer.from(newFilename))
+                .then(messageId => {
+                  console.log(`Message ${messageId} published.`);
+                })
+                .catch(err => {
+                  console.error('ERROR:', err);
+                });
+          });
+      });
+    }
+    else {
+      console.log(`gs://${bucketName}/${fileName} is not an image I can handle`);
+    }
+  }
+  else {
+    console.log(`gs://${bucketName}/${fileName} already has a thumbnail`);
+  }
+});
+```
+#### Add the following code to `package.json`:
+
+```
+{
+  "name": "thumbnails",
+  "version": "1.0.0",
+  "description": "Create Thumbnail of uploaded image",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.0.0",
+    "@google-cloud/pubsub": "^2.0.0",
+    "@google-cloud/storage": "^5.0.0",
+    "fast-crc32c": "1.0.4",
+    "imagemagick-stream": "4.1.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=4.3.2"
+  }
+}
+```
+8. Click Deploy.
 
 ### Task 4: Test the Infrastructure
 
