@@ -11,12 +11,12 @@ Test connectivity between the resources you've created.
 
 ***My details:***
 
-Project ID: qwiklabs-gcp-03-9e7a9808ef9a
-Bucket Name: tf-bucket-606613
-Instance Name: tf-instance-477404
-VPC Name: tf-vpc-566985
-Region: europe-west1
-Zone: europe-west1-c
+- Project ID: qwiklabs-gcp-03-9e7a9808ef9a
+- Bucket Name: tf-bucket-606613
+- Instance Name: tf-instance-477404
+- VPC Name: tf-vpc-566985
+- Region: europe-west1
+- Zone: europe-west1-c
 
 
 <br/> **Task 1. Create the configuration files** <br/>
