@@ -144,3 +144,6 @@ gcloud compute networks subnets create $SUBNET_A --project=$DEVSHELL_PROJECT_ID 
 - Grant the Antern **Editor** user the BigQuery Data Viewer role. Username: **Antern Editor username**.
 - Grant the Antern **Owner** user the BigQuery Admin role. Username: **Antern Owner username**.
 
+**Click Check my progress to verify all the objectives.**
+
+# Congratulations!
