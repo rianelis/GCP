@@ -358,7 +358,7 @@ resource "google_compute_instance" "tf-instance-1" {
   name         = "tf-instance-1"
   machine_type = "e2-standard-2"
   zone         = "europe-west1-c"
-  allow_stopping_for_update = true
+ 
 
   boot_disk {
     initialize_params {
@@ -370,16 +370,17 @@ resource "google_compute_instance" "tf-instance-1" {
  network = "tf-vpc-566985"
     subnetwork = "subnet-01"
   }
- metadata_startup_script = <<-EOT
-#!/bin/bash
-EOT
+  metadata_startup_script = <<-EOT
+  #!/bin/bash
+    EOT
+  allow_stopping_for_update = true
 }
 
 resource "google_compute_instance" "tf-instance-2" {
   name         = "tf-instance-2"
   machine_type = "e2-standard-2"
   zone         = "europe-west1-c"
-  allow_stopping_for_update = true
+  
 
   boot_disk {
     initialize_params {
@@ -392,9 +393,10 @@ resource "google_compute_instance" "tf-instance-2" {
     subnetwork = "subnet-02"
   }
 
- metadata_startup_script = <<-EOT
- #!/bin/bash
- EOT
+  metadata_startup_script = <<-EOT
+  #!/bin/bash
+    EOT
+  allow_stopping_for_update = true
 }
 ```
 Run the following commands to initialize the module and update the instances. Type _yes_ at the prompt.
