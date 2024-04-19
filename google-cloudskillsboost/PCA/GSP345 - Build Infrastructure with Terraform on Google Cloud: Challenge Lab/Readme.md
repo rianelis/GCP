@@ -42,7 +42,7 @@ cd
 
 ```
 
-Fill out the variables.tf files in the root directory and within the modules. Add three variables to each file: region, zone, and project_id. For their default values, use europe-west1, europe-west1-c, and your Google Cloud Project ID (qwiklabs-gcp-03-9e7a9808ef9a). Be aware you might propably have diffrent region, zone and project id.
+Fill out the variables.tf files in the root directory and within the modules. Add three variables to each file: region, zone, and project_id. For their default values, use europe-west1, europe-west1-c, and your Google Cloud Project ID (qwiklabs-gcp-03-9e7a9808ef9a). Be aware you might probably have different regions, zones and project IDs.
 ```
 variable "region" {
  default = "europe-west1"
@@ -137,24 +137,26 @@ allow_stopping_for_update = true
 }
 
 ```
-To import the first instance, use the following command, using the Instance ID for _tf-instance-1_ you copied down earlier. My Instace ID is 5404001346111886902
+To import the first instance, use the following command, using the Instance ID for **_tf-instance-1_** you copied down earlier. My Instance ID is **5404001346111886902**
 ```
 terraform import module.instances.google_compute_instance.tf-instance-1 5404001346111886902
 
 ```
-To import the second instance, use the following command, using the Instance ID for _tf-instance-2_ you copied down earlier. My Instace ID is 4168654664566003254
+To import the second instance, use the following command, using the Instance ID for **_tf-instance-2_** you copied down earlier. My Instance ID is **4168654664566003254**
 ```
 terraform import module.instances.google_compute_instance.tf-instance-2 4168654664566003254
 
 ```
-The two instances have now been imported into your terraform configuration. You can now run the commands to update the state of Terraform. Type _yes_ at the dialogue after you run the apply command to accept the state changes.
+The two instances have been imported into your Terraform configuration. You can now run the commands to update Terraform's state. After you run the apply command, type _yes_ in the dialogue to accept the state changes.
 ```
 terraform plan
 terraform apply
 
 ```
+**Note: "Check my progress" won't be successful until the end of Task 6. **
+
 <br/> **TASK 3: Configure a remote backend** <br/>
-Add the following code to the _modules/storage/storage.tf_ file, and fill in the _Bucket Name_: My bicjet name is tf-bucket-606613
+Add the following code to the **_modules/storage/storage.tf_** file, and fill in the _Bucket Name_: My bucket name is **tf-bucket-606613**
 
 ```
 resource "google_storage_bucket" "tf-bucket-606613" {
@@ -172,7 +174,7 @@ module "storage" {
 }
 
 ```
-Run the following commands to initialize the module and create the storage bucket resource. Type _yes_ at the dialogue after you run the apply command to accept the state changes.
+Run the following commands to initialize the module and create the storage bucket resource. Type _yes_ in the dialogue after you run the apply command to accept the state changes.
 ```
 terraform init
 terraform apply
@@ -254,7 +256,7 @@ resource "google_compute_instance" "tf-instance-477404" {
 }
 
 ```
-Run the following commands to initialize the module and create/update the instance resources. Type _yes_ at the dialogue after you run the apply command to accept the state changes.
+Run the following commands to initialize the module and create/update the instance resources. Type _yes_ in the dialogue after you run the apply command to accept the state changes.
 
 ```
 terraform init
@@ -368,6 +370,9 @@ resource "google_compute_instance" "tf-instance-1" {
  network = "tf-vpc-566985"
     subnetwork = "subnet-01"
   }
+ metadata_startup_script = <<-EOT
+#!/bin/bash
+EOT
 }
 
 resource "google_compute_instance" "tf-instance-2" {
@@ -386,6 +391,10 @@ resource "google_compute_instance" "tf-instance-2" {
  network = "tf-vpc-566985"
     subnetwork = "subnet-02"
   }
+
+ metadata_startup_script = <<-EOT
+ #!/bin/bash
+ EOT
 }
 ```
 Run the following commands to initialize the module and update the instances. Type _yes_ at the prompt.
