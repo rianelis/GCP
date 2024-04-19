@@ -151,9 +151,29 @@ The two instances have been imported into your Terraform configuration. You can 
 ```
 terraform plan
 terraform apply
-
 ```
-**Note: "Check my progress" won't be successful until the end of Task 6. **
+
+**Note: Plan: 0 to add, 2 to change, 0 to destroy.**
+
+Next, navigate to _modules/instances/instances.tf_. Copy the following configuration into the file on both instances:
+```
+  network_interface {
+ network = "default"
+  }
+
+metadata_startup_script = <<-EOT
+#!/bin/bash
+EOT
+
+allow_stopping_for_update = true
+}
+```
+```
+terraform plan
+terraform apply
+```
+**Note: Plan: 2 to add, 0 to change, 2 to destroy.**
+**Note: This extra step is due to lab circumstances. Without this step, the check progress will not be successful until Task 6. This step destroys the current instances and recreates them with the metadat_startup_script**
 
 <br/> **TASK 3: Configure a remote backend** <br/>
 Add the following code to the **_modules/storage/storage.tf_** file, and fill in the _Bucket Name_: My bucket name is **tf-bucket-606613**
