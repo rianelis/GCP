@@ -289,11 +289,14 @@ Taint the _tf-instance-3_ resource by running the following command, and fill in
 terraform taint module.instances.google_compute_instance.tf-instance-477404
 
 ```
+
 Run the following commands to apply the changes:
+
 ```
 terraform init
 terraform apply
 ```
+
 Remove the _tf-instance-3_ resource from the _instances.tf_ file. Delete the following code chunk from the file.
 ```
 resource "google_compute_instance" "tf-instance-477404" {
