@@ -108,10 +108,6 @@ resource "google_compute_instance" "tf-instance-1" {
  network = "default"
   }
 
-metadata_startup_script = <<-EOT
-#!/bin/bash
-EOT
-
 allow_stopping_for_update = true
 }
 
@@ -128,10 +124,6 @@ resource "google_compute_instance" "tf-instance-2" {
   network_interface {
  network = "default"
   }
-
-metadata_startup_script = <<-EOT
-#!/bin/bash
-EOT
 
 allow_stopping_for_update = true
 }
