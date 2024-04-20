@@ -65,7 +65,7 @@ terraform {
   required_providers {
     google = {
       source = "hashicorp/google"
-      version = "3.55.0" #">= 3.55.0, < 6.0.1"
+      version = "3.55.0" 
     }
   }
 }
@@ -192,7 +192,7 @@ terraform init
 terraform apply
 
 ```
-Next, update the _main.tf_ file so that the terraform block looks like the following. Fill in your _GCP Project ID_ for the bucket argument definition. My project id is qwiklabs-gcp-03-9e7a9808ef9a
+Next, update the **_main.tf_** file so that the terraform block looks like the following. Fill in your _GCP Project ID_ for the bucket argument definition. My project id is **qwiklabs-gcp-03-9e7a9808ef9a**
 ```
 terraform {
   backend "gcs" {
@@ -213,7 +213,7 @@ Run the following to initialize the remote backend. Type _yes_ at the prompt.
 terraform init
 ```
 <br/> **TASK 4: Modify and update infrastructure** <br/>
-Navigate to _modules/instances/instance.tf_. Replace the entire contents of the file with the following, and fill in your _Instance 3 ID_: My 3rd instance name is tf-instance-477404.
+Navigate to **_modules/instances/instance.tf_**. Replace the entire contents of the file with the following, and fill in your **_Instance 3 ID_**: My 3rd instance name is **tf-instance-477404**.
 
 ```
 resource "google_compute_instance" "tf-instance-1" {
@@ -268,14 +268,14 @@ resource "google_compute_instance" "tf-instance-477404" {
 }
 
 ```
-Run the following commands to initialize the module and create/update the instance resources. Type _yes_ in the dialogue after you run the apply command to accept the state changes.
+Run the following commands to initialize the module and create/update the instance resources. After you run the apply command, type **_yes_** in the dialogue to accept the state changes.
 
 ```
 terraform init
 terraform apply
 ```
 <br/> **TASK 5: Taint and destroy resources** <br/>
-Taint the _tf-instance-3_ resource by running the following command, and fill in your _Instance 3 ID_: My Instance 3 is tf-instance-477404.
+Taint the **_tf-instance-3_** resource by running the following command, and fill in your **_Instance 3 ID_** : My Instance 3 is **tf-instance-477404**.
 
 ```
 terraform taint module.instances.google_compute_instance.tf-instance-477404
@@ -289,7 +289,7 @@ terraform init
 terraform apply
 ```
 
-Remove the _tf-instance-3_ resource from the _instances.tf_ file. Delete the following code chunk from the file.
+Remove the **_tf-instance-3_** resource from the **_instances.tf_** file. Delete the following code chunk from the file.
 ```
 resource "google_compute_instance" "tf-instance-477404" {
   name         = "tf-instance-477404"
@@ -308,7 +308,7 @@ resource "google_compute_instance" "tf-instance-477404" {
   }
 }
 ```
-Run the following commands to apply the changes. Type _yes_ at the prompt.
+Run the following commands to apply the changes. Type **_yes_** at the prompt.
 
 ```
 terraform apply
@@ -333,7 +333,7 @@ terraform {
 
 ```
 
-Copy and paste the following to the end of _main.tf_ file, fill in _Version Number_ and _Network Name_ instructed in the challenge: My version is 6.0.0 and my network is tf-vpc-566985.
+Copy and paste the following to the end of **_main.tf_** file, fill in **_Version Number_** and **_Network Name_** instructed in the challenge: My version is 6.0.0 and my network is **tf-vpc-566985**.
 
 ```
 
@@ -360,13 +360,13 @@ module "vpc" {
 }
 
 ```
-Run the following commands to initialize and upgrade the module and create the VPC. Type _yes_ at the prompt.
+Run the following commands to initialize and upgrade the module and create the VPC. Type **_yes_** at the prompt.
 ```
 terraform init -upgrade
 terraform apply
 
 ```
-Navigate to _modules/instances/instances.tf_. Replace the entire contents of the file with the following:
+Navigate to **_modules/instances/instances.tf_** . Replace the entire contents of the file with the following:
 
 ```
 resource "google_compute_instance" "tf-instance-1" {
@@ -414,7 +414,7 @@ resource "google_compute_instance" "tf-instance-2" {
   allow_stopping_for_update = true
 }
 ```
-Run the following commands to initialize the module and update the instances. Type _yes_ at the prompt.
+Run the following commands to initialize the module and update the instances. Type **_yes_** at the prompt.
 
 ```
 terraform init
@@ -422,7 +422,7 @@ terraform apply
 
 ```
 <br/> **TASK : Configure a firewall** <br/>
-Add the following resource to the _main.tf_ file, fill in the _GCP Project ID_ and _Network Name_: My project is is qwiklabs-gcp-03-9e7a9808ef9a and my network name is tf-vpc-566985
+Add the following resource to the **_main.tf_** file, fill in the **_GCP Project ID_** and **_Network Name_**: My project is is qwiklabs-gcp-03-9e7a9808ef9a and my network name is **tf-vpc-566985**
 
 ```
 resource "google_compute_firewall" "tf-firewall" {
@@ -439,7 +439,7 @@ resource "google_compute_firewall" "tf-firewall" {
 }
 
 ```
-Run the following commands to configure the firewall. Type _yes_ at the prompt.
+Run the following commands to configure the firewall. Type **_yes_** at the prompt.
 ```
 terraform init
 terraform apply
