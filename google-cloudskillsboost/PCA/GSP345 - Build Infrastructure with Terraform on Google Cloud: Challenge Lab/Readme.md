@@ -421,7 +421,7 @@ terraform init
 terraform apply
 
 ```
-<br/> **TASK 6: Configure a firewall** <br/>
+<br/> **TASK : Configure a firewall** <br/>
 Add the following resource to the _main.tf_ file, fill in the _GCP Project ID_ and _Network Name_: My project is is qwiklabs-gcp-03-9e7a9808ef9a and my network name is tf-vpc-566985
 
 ```
