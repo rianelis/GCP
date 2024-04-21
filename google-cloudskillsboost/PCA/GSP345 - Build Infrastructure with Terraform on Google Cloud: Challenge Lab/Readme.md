@@ -89,8 +89,8 @@ terraform init
 ```
 <br/> **TASK 2: Import infrastructure** <br/>
 
-Navigate to _Compute Engine > VM Instances_. Click on _tf-instance-1_. Copy the _Instance ID_ down somewhere to use later. <br/>
-Navigate to _Compute Engine > VM Instances_. Click on _tf-instance-2_. Copy the _Instance ID_ down somewhere to use later. <br/>
+Use **EDITOR** to Navigate to _Compute Engine > VM Instances_. Click on _tf-instance-1_. Copy the _Instance ID_ down somewhere to use later. <br/>
+Same use **EDITOR** to Navigate to _Compute Engine > VM Instances_. Click on _tf-instance-2_. Copy the _Instance ID_ down somewhere to use later. <br/>
 Next, navigate to _modules/instances/instances.tf_. Copy the following configuration into the file:
 
 ```
@@ -147,7 +147,7 @@ terraform apply
  
 _**Note: Plan: 0 to add, 2 to change, 0 to destroy.**_
 
-Next, navigate to _modules/instances/instances.tf_. Copy the following configuration into the file on both instances:
+Next, use **EDITOR** to navigate to _modules/instances/instances.tf_. Copy the following configuration into the file on both instances:
 ```
   network_interface {
  network = "default"
@@ -213,7 +213,7 @@ Run the following to initialize the remote backend. Type _yes_ at the prompt.
 terraform init
 ```
 <br/> **TASK 4: Modify and update infrastructure** <br/>
-Navigate to **_modules/instances/instance.tf_**. Replace the entire contents of the file with the following, and fill in your **_Instance 3 ID_**: My 3rd instance name is **tf-instance-477404**.
+Use **EDITOR** to navigate to **_modules/instances/instance.tf_**. Replace the entire contents of the file with the following, and fill in your **_Instance 3 ID_**: My 3rd instance name is **tf-instance-477404**.
 
 ```
 resource "google_compute_instance" "tf-instance-1" {
