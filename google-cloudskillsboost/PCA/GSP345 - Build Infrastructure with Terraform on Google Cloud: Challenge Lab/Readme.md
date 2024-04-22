@@ -380,8 +380,8 @@ resource "google_compute_instance" "tf-instance-1" {
   }
 
   network_interface {
-_ network = "tf-vpc-566985"
-    subnetwork = "subnet-01"_
+network = "tf-vpc-566985"
+    subnetwork = "subnet-01"
   }
   metadata_startup_script = <<-EOT
   #!/bin/bash
@@ -402,8 +402,8 @@ resource "google_compute_instance" "tf-instance-2" {
   }
 
   network_interface {
-_ network = "tf-vpc-566985"
-    subnetwork = "subnet-02"_
+network = "tf-vpc-566985"
+    subnetwork = "subnet-02"
   }
 
   metadata_startup_script = <<-EOT
