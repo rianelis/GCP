@@ -62,12 +62,12 @@ Add the following to the **_main.tf_** file:
 
 ```
 terraform {
-  required_providers {
-    google = {
-      source = "hashicorp/google"
-      version = ">= 3.55.0, < 6.0.0" 
+    required_providers {
+        google = {
+            source = "hashicorp/google"
+            version = "4.53.0"
+        }
     }
-  }
 }
 
 provider "google" {
@@ -153,8 +153,9 @@ Next, use **EDITOR** to navigate to _modules/instances/instances.tf_. Copy the f
  network = "default"
   }
 
-
-
+metadata_startup_script = <<-EOT
+        #!/bin/bash
+    EOT
 
 allow_stopping_for_update = true
 }
@@ -168,7 +169,7 @@ _**Note: Plan: 2 to add, 0 to change, 2 to destroy.**
 **Note: This extra step is due to lab circumstances. Without this step, the check progress will not be successful until Task 6. This step destroys the current instances and recreates them with the metadat_startup_script**_
 
 <br/> **TASK 3: Configure a remote backend** <br/>
-Add the following code to the **_modules/storage/storage.tf_** file, and fill in the _Bucket Name_: My bucket name is **tf-bucket-606613**
+Add the following code to the **_modules/storage/storage.tf_** file, and fill in the **_Bucket Name_**: My bucket name is **tf-bucket-606613**
 
 ```
 resource "google_storage_bucket" "tf-bucket-606613" {
@@ -199,12 +200,12 @@ terraform {
     bucket  = "tf-bucket-606613"
  prefix  = "terraform/state"
   }
-  required_providers {
-    google = {
-      source = "hashicorp/google"
-      version = ">= 3.55.0, < 6.0.0" 
+    required_providers {
+        google = {
+            source = "hashicorp/google"
+            version = "4.53.0"
+        }
     }
-  }
 }
 
 ```
@@ -220,7 +221,7 @@ resource "google_compute_instance" "tf-instance-1" {
   name         = "tf-instance-1"
   machine_type = "e2-standard-2"
   zone         = "europe-west1-c"
-  allow_stopping_for_update = true
+  
 
   boot_disk {
     initialize_params {
@@ -231,13 +232,17 @@ resource "google_compute_instance" "tf-instance-1" {
   network_interface {
  network = "default"
   }
+  metadata_startup_script = <<-EOT
+  #!/bin/bash
+    EOT
+allow_stopping_for_update = true
 }
 
 resource "google_compute_instance" "tf-instance-2" {
   name         = "tf-instance-2"
   machine_type = "e2-standard-2"
   zone         = "europe-west1-c"
-  allow_stopping_for_update = true
+  
 
   boot_disk {
     initialize_params {
@@ -248,13 +253,17 @@ resource "google_compute_instance" "tf-instance-2" {
   network_interface {
  network = "default"
   }
+  metadata_startup_script = <<-EOT
+  #!/bin/bash
+    EOT
+allow_stopping_for_update = true
 }
 
 resource "google_compute_instance" "tf-instance-477404" {
   name         = "tf-instance-477404"
   machine_type = "e2-standard-2"
   zone         = "europe-west1-c"
-  allow_stopping_for_update = true
+  
 
   boot_disk {
     initialize_params {
@@ -265,6 +274,10 @@ resource "google_compute_instance" "tf-instance-477404" {
   network_interface {
  network = "default"
   }
+  metadata_startup_script = <<-EOT
+  #!/bin/bash
+    EOT
+allow_stopping_for_update = true
 }
 
 ```
@@ -306,6 +319,10 @@ resource "google_compute_instance" "tf-instance-477404" {
   network_interface {
  network = "default"
   }
+  metadata_startup_script = <<-EOT
+  #!/bin/bash
+    EOT
+allow_stopping_for_update = true
 }
 ```
 Run the following commands to apply the changes. Type **_yes_** at the prompt.
@@ -315,24 +332,6 @@ terraform apply
 
 ```
 <br/> **TASK 6: Use a module from the Registry** <br/>
-Change the required_providers ">= 3.55.0, < 6.0.0" in _main.tf_ file
-
-```
-terraform {
-  backend "gcs" {
-    bucket  = "tf-bucket-606613"
- prefix  = "terraform/state"
-  }
-  required_providers {
-    google = {
-      source = "hashicorp/google"
-      version = ">= 3.55.0, < 6.0.1"
-    }
-  }
-}
-
-```
-
 Copy and paste the following to the end of **_main.tf_** file, fill in **_Version Number_** and **_Network Name_** instructed in the challenge: My version is 6.0.0 and my network is **tf-vpc-566985**.
 
 ```
@@ -341,7 +340,7 @@ module "vpc" {
     source  = "terraform-google-modules/network/google"
     version = "~> 6.0.0"
 
-    project_id   = "qwiklabs-gcp-03-9e7a9808ef9a"
+    project_id   = var.project_id
     network_name = "tf-vpc-566985"
     routing_mode = "GLOBAL"
 
@@ -349,12 +348,12 @@ module "vpc" {
         {
             subnet_name           = "subnet-01"
             subnet_ip             = "10.10.10.0/24"
-            subnet_region         = "europe-west1"
+            subnet_region         = var.region
         },
         {
             subnet_name           = "subnet-02"
             subnet_ip             = "10.10.20.0/24"
-            subnet_region         = "europe-west1"
+            subnet_region         = var.region
         }
     ]
 }
@@ -362,19 +361,18 @@ module "vpc" {
 ```
 Run the following commands to initialize and upgrade the module and create the VPC. Type **_yes_** at the prompt.
 ```
-terraform init -upgrade
+terraform init 
 terraform apply
 
 ```
-Navigate to **_modules/instances/instances.tf_** . Replace the entire contents of the file with the following:
+Navigate to **_modules/instances/instances.tf_** . Replace the entire contents of the file with the following, which, replaces the default network with the network provided by the lab and adds the subnet:
 
 ```
 resource "google_compute_instance" "tf-instance-1" {
   name         = "tf-instance-1"
   machine_type = "e2-standard-2"
-  zone         = "europe-west1-c"
- 
 
+ 
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
@@ -382,8 +380,8 @@ resource "google_compute_instance" "tf-instance-1" {
   }
 
   network_interface {
- network = "tf-vpc-566985"
-    subnetwork = "subnet-01"
+_ network = "tf-vpc-566985"
+    subnetwork = "subnet-01"_
   }
   metadata_startup_script = <<-EOT
   #!/bin/bash
@@ -394,7 +392,7 @@ resource "google_compute_instance" "tf-instance-1" {
 resource "google_compute_instance" "tf-instance-2" {
   name         = "tf-instance-2"
   machine_type = "e2-standard-2"
-  zone         = "europe-west1-c"
+  
   
 
   boot_disk {
@@ -404,8 +402,8 @@ resource "google_compute_instance" "tf-instance-2" {
   }
 
   network_interface {
- network = "tf-vpc-566985"
-    subnetwork = "subnet-02"
+_ network = "tf-vpc-566985"
+    subnetwork = "subnet-02"_
   }
 
   metadata_startup_script = <<-EOT
