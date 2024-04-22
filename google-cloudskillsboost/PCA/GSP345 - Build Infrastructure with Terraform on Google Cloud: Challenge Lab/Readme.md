@@ -42,7 +42,7 @@ cd
 
 ```
 
-Fill out the variables.tf files in the root directory and within the modules. Add three variables to each file: region, zone, and project_id. For their default values, use europe-west1, europe-west1-c, and your Google Cloud Project ID (qwiklabs-gcp-03-9e7a9808ef9a). Be aware you might probably have different regions, zones and project IDs.
+Fill out the variables.tf files in the root directory and within the modules. Add three variables to each file: region, zone, and project_id. For their default values, use europe-west1, europe-west1-c, and your Google Cloud Project ID (qwiklabs-gcp-03-9e7a9808ef9a). Be aware that you might have different regions, zones, and project IDs.
 ```
 variable "region" {
  default = "europe-west1"
@@ -58,7 +58,7 @@ variable "project_id" {
 
 ```
 
-Add the following to the _main.tf_ file:
+Add the following to the **_main.tf_** file:
 
 ```
 terraform {
@@ -89,9 +89,9 @@ terraform init
 ```
 <br/> **TASK 2: Import infrastructure** <br/>
 
-Use **EDITOR** to Navigate to _Compute Engine > VM Instances_. Click on _tf-instance-1_. Copy the _Instance ID_ down somewhere to use later. <br/>
-Same use **EDITOR** to Navigate to _Compute Engine > VM Instances_. Click on _tf-instance-2_. Copy the _Instance ID_ down somewhere to use later. <br/>
-Next, navigate to _modules/instances/instances.tf_. Copy the following configuration into the file:
+Use **EDITOR** to Navigate to _Compute Engine > VM Instances_. Click on **_tf-instance-1_**. Copy the _Instance ID_ down somewhere to use later. <br/>
+Same use **EDITOR** to Navigate to _Compute Engine > VM Instances_. Click on **_tf-instance-2_**. Copy the _Instance ID_ down somewhere to use later. <br/>
+Next, navigate to **_modules/instances/instances.tf_**. Copy the following configuration into the file:
 
 ```
 resource "google_compute_instance" "tf-instance-1" {
@@ -153,13 +153,13 @@ Next, use **EDITOR** to navigate to _modules/instances/instances.tf_. Copy the f
  network = "default"
   }
 
-metadata_startup_script = <<-EOT
-#!/bin/bash
-EOT
+
+
 
 allow_stopping_for_update = true
 }
 ```
+
 ```
 terraform plan
 terraform apply
@@ -202,7 +202,7 @@ terraform {
   required_providers {
     google = {
       source = "hashicorp/google"
-      version = "3.55.0"
+      version = ">= 3.55.0, < 6.0.0" 
     }
   }
 }
