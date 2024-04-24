@@ -142,13 +142,13 @@ gcloud container clusters create griffin-dev \
   
   ```
 # **Task 6. Prepare the Kubernetes cluster**
-- From Cloud Shell copy all files from gs://cloud-training/gsp321/wp-k8s.
-The WordPress server needs to access the MySQL database using the username and password you created in task 4.
+- From Cloud Shell copy all files from gs://cloud-training/gsp321/wp-k8s. The WordPress server needs to access the MySQL database using the username and password you created in task 4.
 - You do this by setting the values as secrets. WordPress also needs to store its working files outside the container, so you need to create a volume.
 - Add the following secrets and volume to the cluster using wp-env.yaml.
 - Make sure you configure the username to wp_user and password to stormwind_rules before creating the configuration.
 - You also need to provide a key for a service account that was already set up. This service account provides access to the database for a sidecar container.
 - Use the command below to create the key, and then add the key to the Kubernetes environment:
+
 
 - Create a Service Account Key:
 ```
@@ -173,7 +173,9 @@ cd wp-k8s
 sed -i s/username_goes_here/wp_user/g wp-env.yaml
 sed -i s/password_goes_here/stormwind_rules/g wp-env.yaml
 ```
+***Note: Task 6 will be green after you complete task 7.**
 
+  
 # Task 7. Create a WordPress deployment
 
 - Create Environment Config in Kubernetes:
