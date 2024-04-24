@@ -28,6 +28,16 @@ As soon as you sit down at your desk and open your new laptop you receive the fo
 
 ![image](https://github.com/rianelis/GCP/assets/31323104/266e7cc6-c722-4743-8f0e-94db658b1997)
 
+
+**My Lab Details:**
+- Username 1: student-02-8bfaa70d62e0@qwiklabs.net
+- Username 2: student-03-5dc0aeced461@qwiklabs.net (second account for Task 9)
+- Project ID: qwiklabs-gcp-04-ccdde178c0a8
+- Region: us-east1
+- Zone : us-east1-c
+- **Note: Replace with values provided to you.**
+
+  
 # Task 1. Create development VPC manually
 Create a VPC called **griffin-dev-vpc** with the following subnets only:
 
@@ -95,7 +105,7 @@ gcloud compute firewall-rules create fw-ssh-prod --source-ranges=0.0.0.0/0 --tar
 
 - Creating the SQL Instance and set the root password: password
 ```
-gcloud sql instances create griffin-dev-db --root-password password --region=us-east1 --database-version=MYSQL_5_7
+gcloud sql instances create griffin-dev-db --root-password password --region=us-east1 --database-version=MYSQL_8_0
 ```
 
 Connecting to the SQL Instance 
@@ -111,7 +121,8 @@ Connecting to database with SQL user [root].Enter password: password
 - The GRANT ALL PRIVILEGES command in MySQL 5.7 should be correctly formatted and it's important to first create the user before granting privileges. The IDENTIFIED BY clause should be part of the CREATE USER statement, not the GRANT statement. Here's how you can adjust your commands:
 ```
 CREATE DATABASE wordpress;
-GRANT ALL PRIVILEGES ON wordpress.* TO "wp_user"@"%" IDENTIFIED BY "stormwind_rules";
+CREATE USER "wp_user"@"%" IDENTIFIED BY "stormwind_rules";
+GRANT ALL PRIVILEGES ON wordpress.* TO "wp_user"@"%";
 FLUSH PRIVILEGES;
 exit
 ```
