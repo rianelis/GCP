@@ -51,13 +51,20 @@ Create a VPC called **griffin-dev-vpc** with the following subnets only:
 gcloud auth list
 ```
 
+-Set your Region and Zone
+```
+ZONE="us-east1-d"
+REGION="us-east1"
+```
+
+
 - Create a VPC
 ```
 gcloud compute networks create griffin-dev-vpc --subnet-mode custom
 
-gcloud compute networks subnets create griffin-dev-wp --network=griffin-dev-vpc --region us-east1 --range=192.168.16.0/20
+gcloud compute networks subnets create griffin-dev-wp --network=griffin-dev-vpc --region $region --range=192.168.16.0/20
 
-gcloud compute networks subnets create griffin-dev-mgmt --network=griffin-dev-vpc --region us-east1 --range=192.168.32.0/20
+gcloud compute networks subnets create griffin-dev-mgmt --network=griffin-dev-vpc --region $region --range=192.168.32.0/20
 ```
 
 # Task 2. Create production VPC manually
@@ -76,7 +83,7 @@ cd dm
 
 - Edit the Configuration File:
 ```
-sed -i s/SET_REGION/us-east1/g prod-network.yaml
+sed -i s/SET_REGION/$region/g prod-network.yaml
 ```
 
 - Create Deployment with Deployment Manager:
@@ -91,7 +98,7 @@ cd ..
 - Create a bastion host with two network interfaces, one connected to griffin-dev-mgmt and the other connected to griffin-prod-mgmt. Make sure you can SSH to the host.
   
 ```
-gcloud compute instances create bastion --network-interface=network=griffin-dev-vpc,subnet=griffin-dev-mgmt  --network-interface=network=griffin-prod-vpc,subnet=griffin-prod-mgmt --tags=ssh --zone=us-east1-c
+gcloud compute instances create bastion --network-interface=network=griffin-dev-vpc,subnet=griffin-dev-mgmt  --network-interface=network=griffin-prod-vpc,subnet=griffin-prod-mgmt --tags=ssh --zone=$ZONE
 
 gcloud compute firewall-rules create fw-ssh-dev --source-ranges=0.0.0.0/0 --target-tags ssh --allow=tcp:22 --network=griffin-dev-vpc
 
@@ -105,7 +112,7 @@ gcloud compute firewall-rules create fw-ssh-prod --source-ranges=0.0.0.0/0 --tar
 
 - Creating the SQL Instance and set the root password: password
 ```
-gcloud sql instances create griffin-dev-db --root-password password --region=us-east1 --database-version=MYSQL_8_0
+gcloud sql instances create griffin-dev-db --root-password password --region=$REGION --database-version=MYSQL_8_0
 ```
 
 Connecting to the SQL Instance 
@@ -118,7 +125,7 @@ gcloud sql connect griffin-dev-db
 Connecting to database with SQL user [root].Enter password: password
 ```
 
-- The GRANT ALL PRIVILEGES command in MySQL 5.7 should be correctly formatted and it's important to first create the user before granting privileges. The IDENTIFIED BY clause should be part of the CREATE USER statement, not the GRANT statement. Here's how you can adjust your commands:
+- The GRANT ALL PRIVILEGES command in MySQL 8.0.
 ```
 CREATE DATABASE wordpress;
 CREATE USER "wp_user"@"%" IDENTIFIED BY "stormwind_rules";
@@ -138,7 +145,7 @@ gcloud container clusters create griffin-dev \
   --subnetwork griffin-dev-wp \
   --machine-type n1-standard-4 \
   --num-nodes 2  \
-  --zone us-east1-c
+  --zone $ZONE
   
   ```
 # **Task 6. Prepare the Kubernetes cluster**
